@@ -10,31 +10,55 @@ describe("Juice-shop scenarios", () => {
 
     it("Login", () => {
       // Click Account button
+      HomePage.accountButton.click(); 
       // Click Login button
+      HomePage.landingLoginButton.click(); 
       // Set email value to "demo"
+      HomePage.emailType.type("demo");
       // Set password value to "demo"
+      HomePage.passwordType.type("demo");
       // Click Log in
+      HomePage.loginButton.click();
       // Click Account button
+      HomePage.accountButton.click(); 
       // Validate that "demo" account name appears in the menu section
+      HomePage.accountNameValidation.should("contain.text","demo")
     });
 
     it("Registration", () => {
       // Click Account button
+      HomePage.accountButton.click(); 
       // Login button
+      HomePage.landingLoginButton.click(); 
       // Click "Not yet a customer?"
+      HomePage.notYetCustomer.click();
       // Find - how to generate random number in JS
+      const randomNumber = Math.floor(Math.random() * 9000) + 1000;
       // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
       // Save that email address to some variable
+      const email = `kakis_${randomNumber}@ebox.com`;
       // Fill in password field and repeat password field with same password
+      HomePage.passwordControl.type("demo5");
       // Click on Security Question menu
+      HomePage.secQuestion.click()
       // Select  "Name of your favorite pet?"
+      HomePage.favouritePetQuestion.click()
       // Fill in answer
-      // Click Register button
+      HomePage.securityAnswerControl.type("kakis")
       // Set email value to previously created email
+      HomePage.emailControl.type(email)
       // Set password value to previously used password value
+      HomePage.repeatPasswordControl.type("demo5");
+      // Click Register button
+      HomePage.registerButton.click()
       // Click login button
+      HomePage.emailType.type(email);
+      HomePage.passwordType.type("demo5");
+      HomePage.loginButton.click();
       // Click Account button
+      HomePage.accountButton.click(); 
       // Validate that account name (with previously created email address) appears in the menu section
+      HomePage.accountNameValidation.should("contain.text",email)
     });
   });
 
