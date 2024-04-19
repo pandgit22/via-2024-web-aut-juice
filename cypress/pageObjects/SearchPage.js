@@ -34,6 +34,25 @@ export class SearchPage extends BasePage {
     static get reviewBody() {
         return cy.get('.mat-expansion-panel-body')
     }
-
-
+    static get cardList() {
+        return cy.get('.mat-grid-list mat-card')
+    }
+    static get cardTile() {
+        return cy.get('mat-grid-tile')
+    }
+    static get cardDropdown() {
+        return cy.get('#mat-select-value-1')
+    }
+    static get cardDropdown24() {
+        return cy.get('#mat-option-1 > .mat-option-text')
+    }
+    static get cardDropdown36() {
+        return cy.get('#mat-option-2 > .mat-option-text')
+    }
+    static get addToBasket() {
+        return cy.get("[aria-label='Add to Basket']");
+    }
+    static get showBasket() {
+        return cy.get("[aria-label='Show the shopping cart']");
+    }
 }

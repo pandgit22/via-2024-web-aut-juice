@@ -1,6 +1,15 @@
 import { HomePage } from "../pageObjects/HomePage";
 import { SearchPage } from "../pageObjects/SearchPage";
 import { LoginPage } from "../pageObjects/LoginPage";
+import { BasketPage } from "../pageObjects/BasketPage";
+import { SelectAddressPage } from "../pageObjects/SelectAddressPage";
+import { DeliveryMethodPage } from "../pageObjects/DeliveryMethodPage";
+import { PaymentOptionsPage } from "../pageObjects/PaymentOptionsPage";
+import { OrderSummaryPage } from "../pageObjects/OrderSummaryPage";
+import { OrderCompletionPage } from "../pageObjects/OrderCompletionPage";
+import { SavedPaymentMethodsPage } from "../pageObjects/SavedPaymentMethodsPage";
+import { SavedAddressesPage } from "../pageObjects/SavedAddressesPage";
+import { CreateAddressPage } from "../pageObjects/CreateAddressPage";
 
 describe("Juice-shop scenarios", () => {
   context("Without auto login", () => {
@@ -174,55 +183,134 @@ describe("Juice-shop scenarios", () => {
     });
 
     // Create scenario - Validate product card amount
+    context("Validate product card amount", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Validate product card amount", () => {
     // Validate that the default amount of cards is 12
+    SearchPage.cardList.should("have.length",12)
     // Change items per page (at the bottom of page) to 24
+    SearchPage.cardDropdown.click()
+    SearchPage.cardDropdown24.click()
     // Validate that the amount of cards is 24
+    SearchPage.cardList.should("have.length",24)
     // Change items per page (at the bottom of page) to 36
+    SearchPage.cardDropdown.click()
+    SearchPage.cardDropdown36.click()
     // Validate that the amount of cards is 35
-
+    SearchPage.cardList.should("have.length",35)
+     });
+  });
+  
     // Create scenario - Buy Girlie T-shirt
-    // Click on search icon
-    // Search for Girlie
-    // Add to basket "Girlie"
-    // Click on "Your Basket" button
-    // Create page object - BasketPage
-    // Click on "Checkout" button
-    // Create page object - SelectAddressPage
-    // Select address containing "United Fakedom"
-    // Click Continue button
-    // Create page object - DeliveryMethodPage
-    // Select delivery speed Standard Delivery
-    // Click Continue button
-    // Create page object - PaymentOptionsPage
-    // Select card that ends with "5678"
-    // Click Continue button
-    // Create page object - OrderSummaryPage
-    // Click on "Place your order and pay"
-    // Create page object - OrderCompletionPage
-    // Validate confirmation - "Thank you for your purchase!"
-
-    // Create scenario - Add address
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My saved addresses
-    // Create page object - SavedAddressesPage
-    // Click on Add New Address
-    // Create page object - CreateAddressPage
-    // Fill in the necessary information
-    // Click Submit button
-    // Validate that previously added address is visible
+    context("Create scenario - Buy Girlie T-shirt", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Create scenario - Buy Girlie T-shirt", () => {
+        // Click on search icon
+        SearchPage.searchButton.click();
+        // Search for Girlie
+        SearchPage.searchType.type("Girlie{enter}");
+        // Add to basket "Girlie"
+        SearchPage.addToBasket.click()
+        // Click on "Your Basket" button
+        SearchPage.showBasket.click()
+        // Create page object - BasketPage
+        // Click on "Checkout" button
+        BasketPage.checkoutButton.click()
+        // Create page object - SelectAddressPage
+        // Select address containing "United Fakedom"
+        SelectAddressPage.selectAddress.contains("United Fakedom").click()
+        // Click Continue button
+        SelectAddressPage.selectContinue.contains("navigate_next").click()
+        // Create page object - DeliveryMethodPage
+        // Select delivery speed Standard Delivery
+        DeliveryMethodPage.selectDelivery.contains("Standard Delivery").click()
+        // Click Continue button
+        DeliveryMethodPage.deliveryContinue.click()
+        // Create page object - PaymentOptionsPage
+        // Select card that ends with "5678"
+        PaymentOptionsPage.selectCreditCard("5678").click()
+        // Click Continue button
+        PaymentOptionsPage.cardContinue.click()
+        // Create page object - OrderSummaryPage
+        // Click on "Place your order and pay"
+        OrderSummaryPage.checkoutButton.click()
+        // Create page object - OrderCompletionPage
+        // Validate confirmation - "Thank you for your purchase!"
+        OrderCompletionPage.validateCompletion.should("contain.text","Thank you for your purchase!")
+      });
+    });
+// Create scenario - Add address
+    context("Create scenario - Add address", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Create scenario - Add address", () => {
+        // Click on Account
+        HomePage.accountButton.click(); 
+        // Click on Orders & Payment
+        cy.wait(100)
+        HomePage.orderPaymentButton.click();
+        // Click on My saved addresses
+        cy.wait(100)
+        HomePage.mySavedAddresses.click();
+        // Create page object - SavedAddressesPage
+        // Click on Add New Address
+        SavedAddressesPage.addNewAddressButton.click()
+        // Create page object - CreateAddressPage
+        // Fill in the necessary information
+        CreateAddressPage.setCountry.type("United Fakedom")
+        CreateAddressPage.setName.type("John")
+        CreateAddressPage.setNumber.type("34564365")
+        CreateAddressPage.setZIP.type("3245234")
+        CreateAddressPage.setAddress.type("United Fakedom")
+        CreateAddressPage.setCity.type("Womanchester")
+        CreateAddressPage.setState.type("idk")
+        // Click Submit button
+        CreateAddressPage.submitButton.click()
+        // Validate that previously added address is visible
+        SavedAddressesPage.validateNewAddress.should("contain.text","Womanchester")
+      });
+    });
 
     // Create scenario - Add payment option
-    // Click on Account
-    // Click on Orders & Payment
-    // Click on My payment options
-    // Create page object - SavedPaymentMethodsPage
-    // Click Add new card
-    // Fill in Name
-    // Fill in Card Number
-    // Set expiry month to 7
-    // Set expiry year to 2090
-    // Click Submit button
-    // Validate that the card shows up in the list
+    context("Add payment option", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Add payment option", () => {
+        // Click on Account
+        HomePage.accountButton.click(); 
+        // Click on Orders & Payment
+        cy.wait(100)
+        HomePage.orderPaymentButton.click();
+        // Click on My payment options
+        HomePage.myPaymentOptions.click()
+        // Create page object - SavedPaymentMethodsPage
+        // Click Add new card
+        SavedPaymentMethodsPage.addNewCard.click()
+        // Fill in Name
+        SavedPaymentMethodsPage.addName.type("demo")
+        // Fill in Card Number
+        SavedPaymentMethodsPage.addCardNumber.type("3456345634563456")
+        // Set expiry month to 7
+        SavedPaymentMethodsPage.addExpiryMonth.click()
+        SavedPaymentMethodsPage.expiryMonth.select(6)
+        // Set expiry year to 2090
+        SavedPaymentMethodsPage.addExpiryYear.click()
+        SavedPaymentMethodsPage.expiryYear.select(10)
+        // Click Submit button
+        SavedPaymentMethodsPage.submitButton.click()
+        // Validate that the card shows up in the list
+        SavedPaymentMethodsPage.validateNewCard.should("contain.text","7/2090")
+      });
+    });
   });
 });

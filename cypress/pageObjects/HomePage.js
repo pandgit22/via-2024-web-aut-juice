@@ -54,5 +54,14 @@ export class HomePage extends BasePage {
   static get emailControl() {
     return cy.get('#emailControl')
   }
+  static get orderPaymentButton() {
+    return cy.get('.mat-menu-content > [aria-label="Show Orders and Payment Menu"]')
+  }
+  static get myPaymentOptions() {
+    return cy.get('[routerlink="/saved-payment-methods"]')
+  }
+  static get mySavedAddresses() {
+    return cy.get('[routerlink="/address/saved"]')
+  }
 
 }
