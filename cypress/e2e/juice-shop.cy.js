@@ -1,4 +1,6 @@
 import { HomePage } from "../pageObjects/HomePage";
+import { SearchPage } from "../pageObjects/SearchPage";
+import { LoginPage } from "../pageObjects/LoginPage";
 
 describe("Juice-shop scenarios", () => {
   context("Without auto login", () => {
@@ -31,34 +33,34 @@ describe("Juice-shop scenarios", () => {
       // Login button
       HomePage.landingLoginButton.click(); 
       // Click "Not yet a customer?"
-      HomePage.notYetCustomer.click();
+      LoginPage.notYetCustomer.click();
       // Find - how to generate random number in JS
       const randomNumber = Math.floor(Math.random() * 9000) + 1000;
       // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
       // Save that email address to some variable
       const email = `kakis_${randomNumber}@ebox.com`;
       // Fill in password field and repeat password field with same password
-      HomePage.passwordControl.type("demo5");
+      LoginPage.passwordControl.type("demo5");
       // Click on Security Question menu
-      HomePage.secQuestion.click()
+      LoginPage.secQuestion.click()
       // Select  "Name of your favorite pet?"
-      HomePage.favouritePetQuestion.click()
+      LoginPage.favouritePetQuestion.click()
       // Fill in answer
-      HomePage.securityAnswerControl.type("kakis")
+      LoginPage.securityAnswerControl.type("kakis")
       // Set email value to previously created email
-      HomePage.emailControl.type(email)
+      LoginPage.emailControl.type(email)
       // Set password value to previously used password value
-      HomePage.repeatPasswordControl.type("demo5");
+      LoginPage.repeatPasswordControl.type("demo5");
       // Click Register button
-      HomePage.registerButton.click()
+      LoginPage.registerButton.click()
       // Click login button
-      HomePage.emailType.type(email);
-      HomePage.passwordType.type("demo5");
-      HomePage.loginButton.click();
+      LoginPage.emailType.type(email);
+      LoginPage.passwordType.type("demo5");
+      LoginPage.loginButton.click();
       // Click Account button
       HomePage.accountButton.click(); 
       // Validate that account name (with previously created email address) appears in the menu section
-      HomePage.accountNameValidation.should("contain.text",email)
+      LoginPage.accountNameValidation.should("contain.text",email)
     });
   });
 
@@ -70,35 +72,80 @@ describe("Juice-shop scenarios", () => {
 
     it("Search and validate Lemon", () => {
       // Click on search icon
+      SearchPage.searchButton.click();
       // Search for Lemon
+      SearchPage.searchType.type("Lemon{enter}");
       // Select a product card - Lemon Juice (500ml)
+      SearchPage.searchCard.click();
       // Validate that the card (should) contains "Sour but full of vitamins."
+      SearchPage.validationCard.should("contain.text","Sour but full of vitamins.")
     });
 
     // Create scenario - Search 500ml and validate Lemon, while having multiple cards
-    // Click on search icon
-    // Search for 500ml
-    // Select a product card - Lemon Juice (500ml)
-    // Validate that the card (should) contains "Sour but full of vitamins."
-
+    context("Search 500ml and validate Lemon, while having multiple cards", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Search 500ml and validate Lemon, while having multiple cards", () => {
+        // Click on search icon
+        SearchPage.searchButton.click();
+        // Search for 500ml
+        SearchPage.searchType.type("500ml{enter}");
+        // Select a product card - Lemon Juice (500ml)
+        SearchPage.lemonCard.click();
+        // Validate that the card (should) contains "Sour but full of vitamins."
+        SearchPage.validationCard.should("contain.text","Sour but full of vitamins.")
+      });
+    });
     // Create scenario - Search 500ml and validate cards
-    // Click on search icon
-    // Search for 500ml
-    // Select a product card - Eggfruit Juice (500ml)
-    // Validate that the card (should) contains "Now with even more exotic flavour."
-    // Close the card
-    // Select a product card - Lemon Juice (500ml)
-    // Validate that the card (should) contains "Sour but full of vitamins."
-    // Close the card
-    // Select a product card - Strawberry Juice (500ml)
-    // Validate that the card (should) contains "Sweet & tasty!"
-
+    context("Search 500ml and validate cards", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it("Search 500ml and validate cards", () => {
+        // Click on search icon
+        SearchPage.searchButton.click();
+        // Search for 500ml
+        SearchPage.searchType.type("500ml{enter}");
+        // Select a product card - Eggfruit Juice (500ml)
+        SearchPage.eggfruitCard.click();
+        // Validate that the card (should) contains "Now with even more exotic flavour."
+        SearchPage.validationCard.should("contain.text","Now with even more exotic flavour.")
+        // Close the card
+        SearchPage.closeDialog.click()
+        // Select a product card - Lemon Juice (500ml)
+        SearchPage.lemonCard.click();
+        // Validate that the card (should) contains "Sour but full of vitamins."
+        SearchPage.validationCard.should("contain.text","Sour but full of vitamins.")
+        // Close the card
+        SearchPage.closeDialog.click()
+        // Select a product card - Strawberry Juice (500ml)
+        SearchPage.strawberryCard.click()
+        // Validate that the card (should) contains "Sweet & tasty!"
+      });
+    });
     // Create scenario - Read a review
+    context("Read a review", () => {
+      beforeEach(() => {
+        cy.login("demo", "demo");
+        HomePage.visit();
+      });
+      it.only("Read a review", () => {
     // Click on search icon
+    SearchPage.searchButton.click();
     // Search for King
+    SearchPage.searchType.type("King{enter}");
     // Select a product card - OWASP Juice Shop "King of the Hill" Facemask
+    SearchPage.kothCard.click()
     // Click expand reviews button/icon (wait for reviews to appear)
+    cy.wait(100)
+    SearchPage.reviewButton.click()
     // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!
+    SearchPage.review1Content.should("contain.text","K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!")
+      });
+    });
 
     // Create scenario - Add a review
     // Click on search icon

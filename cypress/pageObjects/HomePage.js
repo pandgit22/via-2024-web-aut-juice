@@ -54,4 +54,5 @@ export class HomePage extends BasePage {
   static get emailControl() {
     return cy.get('#emailControl')
   }
+
 }
