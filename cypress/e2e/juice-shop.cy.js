@@ -93,7 +93,7 @@ describe("Juice-shop scenarios", () => {
         // Search for 500ml
         SearchPage.searchType.type("500ml{enter}");
         // Select a product card - Lemon Juice (500ml)
-        SearchPage.lemonCard.click();
+        SearchPage.card.contains('Lemon Juice (500ml)').click();
         // Validate that the card (should) contains "Sour but full of vitamins."
         SearchPage.validationCard.should("contain.text","Sour but full of vitamins.")
       });
@@ -110,19 +110,19 @@ describe("Juice-shop scenarios", () => {
         // Search for 500ml
         SearchPage.searchType.type("500ml{enter}");
         // Select a product card - Eggfruit Juice (500ml)
-        SearchPage.eggfruitCard.click();
+        SearchPage.card.contains('Eggfruit Juice (500ml)').click();
         // Validate that the card (should) contains "Now with even more exotic flavour."
         SearchPage.validationCard.should("contain.text","Now with even more exotic flavour.")
         // Close the card
         SearchPage.closeDialog.click()
         // Select a product card - Lemon Juice (500ml)
-        SearchPage.lemonCard.click();
+        SearchPage.card.contains('Lemon Juice (500ml)').click();
         // Validate that the card (should) contains "Sour but full of vitamins."
         SearchPage.validationCard.should("contain.text","Sour but full of vitamins.")
         // Close the card
         SearchPage.closeDialog.click()
         // Select a product card - Strawberry Juice (500ml)
-        SearchPage.strawberryCard.click()
+        SearchPage.card.contains('Strawberry Juice (500ml)').click();
         // Validate that the card (should) contains "Sweet & tasty!"
       });
     });
@@ -138,12 +138,12 @@ describe("Juice-shop scenarios", () => {
     // Search for King
     SearchPage.searchType.type("King{enter}");
     // Select a product card - OWASP Juice Shop "King of the Hill" Facemask
-    SearchPage.kothCard.click()
+    SearchPage.card.contains('King of the Hill').click();
     // Click expand reviews button/icon (wait for reviews to appear)
     cy.wait(100)
     SearchPage.reviewButton.click()
     // Validate review - K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!
-    SearchPage.review1Content.should("contain.text","K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!")
+    SearchPage.reviewBody.should("contain.text","K33p5 y0ur ju1cy 5plu773r 70 y0ur53lf!")
       });
     });
 
@@ -153,17 +153,16 @@ describe("Juice-shop scenarios", () => {
         cy.login("demo", "demo");
         HomePage.visit();
       });
-      it.only("Add a review", () => {
+      it("Add a review", () => {
       // Click on search icon
       SearchPage.searchButton.click();
       // Search for Raspberry
       SearchPage.searchType.type("Raspberry{enter}");
 
       // Select a product card - Raspberry Juice (1000ml)
-      SearchPage.cardByName.should("contain.text","Raspberry Juice (1000ml)").click()
-      //SearchPage.raspberryCard.click();
+      SearchPage.card.contains('Raspberry Juice (1000ml)').click();
       // Type in review - "Tastes like metal"
-      cy.wait(100)
+      cy.wait(1000)
       SearchPage.reviewInputField.type("Tastes like metal")
       // Click Submit
       SearchPage.submitButton.click()
